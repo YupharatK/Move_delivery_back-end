@@ -17,5 +17,5 @@ admin.initializeApp({
 export const db = admin.firestore();
 export const auth = admin.auth();
 
-// แสดงข้อความเมื่อเชื่อมต่อสำเร็จ
+// แสดงข้อความเมื่อเชื่อมต่อสำเร็จ 
 console.log('Firebase Admin SDK initialized successfully!');
