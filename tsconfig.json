@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "target": "es2020",
+    "module": "Node16",
+    "lib": ["es2020"],
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Module Resolution */
+    "moduleResolution": "Node16",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    /* File Layout */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* Source Map Options */
+    "sourceMap": true
+  },
+  "include": ["src/**/*"], // บอกให้ TypeScript สนใจแค่ไฟล์ในโฟลเดอร์ src
+  "exclude": ["node_modules"] // ไม่ต้องสนใจโฟลเดอร์ node_modules
+}

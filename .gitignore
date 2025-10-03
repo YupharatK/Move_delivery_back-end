@@ -1,0 +1,13 @@
+# Node modules directory
+node_modules/
+
+# Environment files
+.env
+*.env
+
+# VS Code directory (optional)
+.vscode/
+
+# Firebase Service Account Key
+*.json # หรือระบุชื่อไฟล์ที่ชัดเจน เช่น serviceAccountKey.json
+serviceAccountKey.json

@@ -1,0 +1,8 @@
+# กำหนดให้ Git จัดการ line endings โดยอัตโนมัติสำหรับไฟล์ข้อความ
+* text=auto
+
+# หรือระบุให้ใช้ LF สำหรับไฟล์โค้ดโดยเฉพาะ
+*.js text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.proto text eol=lf
