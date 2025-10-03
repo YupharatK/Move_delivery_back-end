@@ -1,21 +1,44 @@
+// src/firebase.ts
+
 import * as admin from 'firebase-admin';
 
-// ตรวจสอบว่ามี Environment Variable ที่ชื่อ GOOGLE_APPLICATION_CREDENTIALS หรือไม่
-if (!process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-    throw new Error('GOOGLE_APPLICATION_CREDENTIALS environment variable is not set.');
+// สร้างตัวแปรมารับค่า service account
+let serviceAccount;
+
+// ตรวจสอบว่าตอนนี้รันบน Production (เช่น Render) หรือไม่
+if (process.env.NODE_ENV === 'production') {
+    // ถ้าใช่, ให้ดึงค่าจาก Environment Variable
+    // และต้องแน่ใจว่า GOOGLE_APPLICATION_CREDENTIALS มีค่าอยู่
+    if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+        serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
+    } else {
+        console.error('GOOGLE_APPLICATION_CREDENTIALS environment variable is not set.');
+        process.exit(1); // ออกจากโปรแกรมถ้าไม่มีค่านี้
+    }
+} else {
+    // ถ้าไม่ใช่ (รันบนเครื่องเรา), ให้อ่านจากไฟล์ .json ตามปกติ
+    // *** สำคัญ: ตรวจสอบให้แน่ใจว่า path นี้ถูกต้องสำหรับโปรเจกต์ของคุณ ***
+    // ถ้า serviceAccountKey.json อยู่ในโฟลเดอร์ src ให้ใช้ './serviceAccountKey.json'
+    // ถ้า serviceAccountKey.json อยู่ที่ root ของโปรเจกต์ (นอก src) ให้ใช้ '../serviceAccountKey.json'
+    try {
+        serviceAccount = require('../serviceAccountKey.json');
+    } catch (error) {
+        console.error("Error loading serviceAccountKey.json for local development.", error);
+        process.exit(1);
+    }
 }
 
-// นำข้อมูล JSON string จาก Environment Variable มาแปลงเป็น Object
-const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
-
-// นำข้อมูลที่ได้มาใช้ในการเชื่อมต่อ Firebase
+// Initialize Firebase
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
 
-// Export Firestore และ Auth เพื่อนำไปใช้ในไฟล์อื่น
-export const db = admin.firestore();
-export const auth = admin.auth();
+// export admin ออกไปเพื่อให้ไฟล์อื่นเรียกใช้ได้
+export default admin;
 
-// แสดงข้อความเมื่อเชื่อมต่อสำเร็จ 
-console.log('Firebase Admin SDK initialized successfully!');
+// สร้างตัวแปร db และ auth จาก admin
+const db = admin.firestore();
+const auth = admin.auth();
+
+// Export ออกไปเพื่อให้ไฟล์อื่นเรียกใช้แบบ { db, auth } ได้
+export { db, auth };
